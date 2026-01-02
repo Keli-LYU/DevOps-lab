@@ -6,11 +6,11 @@
   tasks:
     - name: Create security group
       amazon.aws.ec2_security_group:
-        name: sample-app-ansible
+        name: TD2-sample-app-ansible
         description: Allow HTTP and SSH traffic
         rules:
           - proto: tcp
-            ports: [8080]
+            ports: [80]
             cidr_ip: 0.0.0.0/0
           - proto: tcp
             ports: [22]
@@ -21,14 +21,14 @@
       amazon.aws.ec2_key:
         name: ansible-ch2
         file_name: ansible-ch2.key
-        no_log: true
+      no_log: true
       register: aws_ec2_key_pair
 
     - name: Create EC2 instance with Amazon Linux 2
       amazon.aws.ec2_instance:
-        name: sample-app-ansible
+        name: TD2-sample-app-ansible
         key_name: "{{ aws_ec2_key_pair.key.name }}"
-        instance_type: t2.micro
+        instance_type: t3.micro
         security_group: "{{ aws_security_group.group_id }}"
         image_id: ami-078abd88811000d7e
         wait: yes
