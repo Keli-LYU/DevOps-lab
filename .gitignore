@@ -1,0 +1,7 @@
+# 忽略 OpenTofu/Terraform 的隐藏文件夹
+.terraform/
+# 忽略状态文件
+*.tfstate
+*.tfstate.backup
+# 忽略 Provider 锁文件
+.terraform.lock.hcl
