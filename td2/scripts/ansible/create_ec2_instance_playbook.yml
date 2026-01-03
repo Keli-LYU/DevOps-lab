@@ -10,7 +10,7 @@
         description: Allow HTTP and SSH traffic
         rules:
           - proto: tcp
-            ports: [80]
+            ports: [8080]
             cidr_ip: 0.0.0.0/0
           - proto: tcp
             ports: [22]
