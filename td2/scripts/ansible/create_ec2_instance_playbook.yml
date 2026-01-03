@@ -3,6 +3,9 @@
   gather_facts: no
   environment:
     AWS_REGION: eu-west-3
+  vars:
+    instance_count: 3
+    instance_prefix: TD2-sample-app-ansible
   tasks:
     - name: Create security group
       amazon.aws.ec2_security_group:
@@ -26,7 +29,7 @@
 
     - name: Create EC2 instance with Amazon Linux 2
       amazon.aws.ec2_instance:
-        name: TD2-sample-app-ansible
+        name: "{{ instance_prefix }}-{{ item }}"
         key_name: "{{ aws_ec2_key_pair.key.name }}"
         instance_type: t3.micro
         security_group: "{{ aws_security_group.group_id }}"
@@ -35,4 +38,13 @@
         wait_timeout: 500
         tags:
           Ansible: ch2_instances
-      register: ec2_instance
+          Name: "{{ instance_prefix }}-{{ item }}"
+          Instance: "{{ item }}"
+      loop: "{{ range(1, instance_count + 1) | list }}"
+      register: ec2_instances
+
+    - name: Display created instances
+      debug:
+        msg: "Created instance {{ item.instances[0].tags.Name }} with public IP {{ item.instances[0].public_ip_address }}"
+      loop: "{{ ec2_instances.results }}"
+      when: item.instances | length > 0
