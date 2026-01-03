@@ -7,3 +7,15 @@ variable "name" {
   description = "The base name for the instance and all other resources"
   type = string
 }
+
+variable "instance_type" {
+  description = "The type of EC2 instance"
+  type = string
+  default = "t3.micro"
+}
+
+variable "port" {
+  description = "The port the application listens on"
+  type = number
+  default = 8080
+}
