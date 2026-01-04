@@ -16,11 +16,11 @@ locals {
 }
 
 module "sample_app" {
-  source        = "../../modules/ec2-instance"
+  source        = "https://github.com/Keli-LYU/DevOps-lab/tree/main/td2/scripts/modules/ec2-instance"
   for_each      = local.instances
   
   ami_id        = "YOUR_AMI_ID" # Replace with your AMI ID
-  name          = each.key
+  name          = "sample-app-from-github"
   instance_type = each.value.instance_type
   port          = each.value.port
 }
