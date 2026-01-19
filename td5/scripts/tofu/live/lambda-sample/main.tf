@@ -19,10 +19,11 @@ module "function" {
   }
 }
 
-module "gateway" {
-  source = "github.com/brikis98/devops-book//ch3/tofu/modules/api-gateway"
-
-  name = var.name
-  function_arn       = module.function.function_arn
-  api_gateway_routes = ["GET /"]
-}
+# Note: api-gateway module path may need to be adjusted based on available devops-book repository structure
+# module "gateway" {
+#   source = "github.com/brikis98/devops-book//ch3/tofu/modules/api-gateway"
+#
+#   name = var.name
+#   function_arn       = module.function.function_arn
+#   api_gateway_routes = ["GET /"]
+# }
