@@ -9,13 +9,13 @@ module "oidc_provider" {
 
 module "iam_roles" {
   source                         = "github.com/Keli-LYU/DevOps-lab//td5/scripts/tofu/modules/gh-actions-iam-roles"
-  name                           = "lambda-sample"
+  name                           = var.name
   oidc_provider_arn              = module.oidc_provider.oidc_provider_arn
   enable_iam_role_for_testing    = true
   enable_iam_role_for_plan       = true # Add for plan role
   enable_iam_role_for_apply      = true # Add for apply role
-  github_repo                    = "Keli-LYU/DevOps-lab" # ex: "bta-devops/cloud-native-devops-kubernetes-2e"
-  lambda_base_name               = "lambda-sample"
-  tofu_state_bucket              = "YOUR_S3_BUCKET_NAME" # Replace with your bucket name
-  tofu_state_dynamodb_table      = "YOUR_DYNAMODB_TABLE_NAME" # Replace with your table name
+  github_repo                    = var.github_repo
+  lambda_base_name               = var.name
+  tofu_state_bucket              = var.tofu_state_bucket
+  tofu_state_dynamodb_table      = var.tofu_state_dynamodb_table
 }
