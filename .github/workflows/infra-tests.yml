@@ -14,7 +14,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::508003922631:role/lambda-sample-tests
           role-session-name: tests-${{ github.run_number }}-${{ github.actor }}
-          aws-region: eu-west-3
+          aws-region: us-east-2
       - uses: opentofu/setup-opentofu@v1
       - name: Tofu Test
         env:
