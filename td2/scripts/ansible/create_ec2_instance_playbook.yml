@@ -1,36 +1,50 @@
 - name: Deploy an EC2 instance in AWS
-hosts: localhost
-gather_facts: no
-environment:
-AWS_REGION: eu-west-3
-tasks:
-- name: Create security group
-amazon.aws.ec2_security_group:
-name: sample-app-ansible
-description: Allow HTTP and SSH traffic
-rules:
-- proto: tcp
-ports: [8080]
-cidr_ip: 0.0.0.0/0
-- proto: tcp
-ports: [22]
-cidr_ip: 0.0.0.0/0
-register: aws_security_group
-- name: Create a new EC2 key pair
-amazon.aws.ec2_key:
-name: ansible-ch2
-file_name: ansible-ch2.key
-no_log: true
-register: aws_ec2_key_pair
-- name: Create EC2 instance with Amazon Linux 2
-amazon.aws.ec2_instance:
-name: sample-app-ansible
-key_name: "{{ aws_ec2_key_pair.key.name }}"
-instance_type: t2.micro
-security_group: "{{ aws_security_group.group_id }}"
-image_id: ami-078abd88811000d7e
-wait: yes
-wait_timeout: 500
-tags:
-Ansible: ch2_instances
-register: ec2_instance
+  hosts: localhost
+  gather_facts: no
+  environment:
+    AWS_REGION: eu-west-3
+  vars:
+    instance_count: 3
+    instance_prefix: TD2-sample-app-ansible
+  tasks:
+    - name: Create security group
+      amazon.aws.ec2_security_group:
+        name: TD2-sample-app-ansible
+        description: Allow HTTP and SSH traffic
+        rules:
+          - proto: tcp
+            ports: [8080]
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports: [22]
+            cidr_ip: 0.0.0.0/0
+      register: aws_security_group
+
+    - name: Create a new EC2 key pair
+      amazon.aws.ec2_key:
+        name: ansible-ch2
+        file_name: ansible-ch2.key
+      no_log: true
+      register: aws_ec2_key_pair
+
+    - name: Create EC2 instance with Amazon Linux 2
+      amazon.aws.ec2_instance:
+        name: "{{ instance_prefix }}-{{ item }}"
+        key_name: "{{ aws_ec2_key_pair.key.name }}"
+        instance_type: t3.micro
+        security_group: "{{ aws_security_group.group_id }}"
+        image_id: ami-078abd88811000d7e
+        wait: yes
+        wait_timeout: 500
+        tags:
+          Ansible: ch2_instances
+          Name: "{{ instance_prefix }}-{{ item }}"
+          Instance: "{{ item }}"
+      loop: "{{ range(1, instance_count + 1) | list }}"
+      register: ec2_instances
+
+    - name: Display created instances
+      debug:
+        msg: "Created instance {{ item.instances[0].tags.Name }} with public IP {{ item.instances[0].public_ip_address }}"
+      loop: "{{ ec2_instances.results }}"
+      when: item.instances | length > 0

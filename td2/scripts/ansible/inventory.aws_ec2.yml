@@ -1,0 +1,16 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-west-3
+keyed_groups:
+  - key: tags.Ansible
+    prefix: ""
+    separator: ""
+  - key: tags.Instance
+    prefix: instance
+hostnames:
+  - dns-name
+compose:
+  ansible_host: public_ip_address
+filters:
+  tag:Ansible: ch2_instances
+  instance-state-name: running
