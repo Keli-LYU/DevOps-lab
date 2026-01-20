@@ -5,6 +5,6 @@ provider "aws" {
 module "state" {
   source = "../../modules/state-bucket"
 
-  # TODO: fill in your own bucket name!
-  name = "bucket1"
+  # Use a unique bucket name (must be globally unique across all AWS accounts)
+  name = "keli-lyu-devops-tofu-state-2026"
 }
