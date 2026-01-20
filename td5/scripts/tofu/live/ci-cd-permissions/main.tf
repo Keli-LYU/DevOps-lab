@@ -1,30 +1,21 @@
 provider "aws" {
-  region = "us-east-2"
+  region = "eu-west-3" # Replace with your desired region
 }
 
 module "oidc_provider" {
-  source = "github.com/brikis98/devops-book//ch5/tofu/modules/github-aws-oidc"
-
-  provider_url = "https://token.actions.githubusercontent.com" 
-
+  source       = "../../modules/github-aws-oidc"
+  provider_url = "https://token.actions.githubusercontent.com"
 }
 
 module "iam_roles" {
-  source = "github.com/brikis98/devops-book//ch5/tofu/modules/gh-actions-iam-roles"
-
-  name              = "lambda-sample"                           
-  oidc_provider_arn = module.oidc_provider.oidc_provider_arn    
-
-  enable_iam_role_for_testing = true                            
-
-  # TODO: fill in your own repo name here!
-  github_repo      = "brikis98/fundamentals-of-devops-examples" 
-  lambda_base_name = "lambda-sample"                            
-
-  enable_iam_role_for_plan  = true                                
-  enable_iam_role_for_apply = true                                
-
-  # TODO: fill in your own bucket and table name here!
-  tofu_state_bucket         = "fundamentals-of-devops-tofu-state" 
-  tofu_state_dynamodb_table = "fundamentals-of-devops-tofu-state" 
+  source                         = "../../modules/gh-actions-iam-roles"
+  name                           = var.name
+  oidc_provider_arn              = module.oidc_provider.oidc_provider_arn
+  enable_iam_role_for_testing    = true
+  enable_iam_role_for_plan       = true # Add for plan role
+  enable_iam_role_for_apply      = true # Add for apply role
+  github_repo                    = var.github_repo
+  lambda_base_name               = var.name
+  tofu_state_bucket              = var.tofu_state_bucket
+  tofu_state_dynamodb_table      = var.tofu_state_dynamodb_table
 }
