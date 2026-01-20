@@ -6,6 +6,6 @@ terraform {
     region         = "eu-west-3"                         
     encrypt        = true                                
     # TODO: fill in your own DynamoDB table name here!
-    dynamodb_table = "fundamentals-of-devops-tofu-state" 
+    dynamodb_table = "bucket1" 
   }
 }
