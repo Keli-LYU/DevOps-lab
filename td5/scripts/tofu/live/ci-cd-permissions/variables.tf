@@ -11,11 +11,11 @@ variable "github_repo" {
 }
 
 variable "tofu_state_bucket" {
-  description = "S3 bucket name for storing Tofu state"
+  description = "keli-lyu-devops-tofu-state-2026"
   type        = string
 }
 
 variable "tofu_state_dynamodb_table" {
-  description = "DynamoDB table name for Tofu state locking"
+  description = "keli-lyu-devops-tofu-state-2026"
   type        = string
 }
